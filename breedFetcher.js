@@ -58,6 +58,4 @@ const handleBreedDescription = (error, description) => {
 fetchBreedDescription('siamese', handleBreedDescription);
 
 
-// fetchBreedDescription();
-
 module.exports = fetchBreedDescription;
