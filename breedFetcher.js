@@ -15,19 +15,49 @@ const breedName = process.argv.slice(2);
 // };
 
 
-const fetchBreedDescription = (breedName, callback => {
+// const fetchBreedDescription = (breedName, (error, desc) => {
+//   request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
+//     if (error) {
+//       return (error.message, null);
+//     };
+//     const desc = JSON.parse(body);
+//     if (desc[0]) {
+//       return (null, desc[0].description);
+//     };
+//   }
+//   );
+// });
+
+
+//fixed to include callback function
+const fetchBreedDescription = (breedName, callback) => {
   request(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
     if (error) {
-      console.log(error.message, null);
-    };
-    const desc = JSON.parse(body);
-    if (desc[0]) {
-      console.log(null, desc[0].description);
-    };
-  }
-  );
-});
+      callback(error.message, null);
+    } else {
+      const desc = JSON.parse(body);
+      if (desc[0]) {
+        callback(null, desc[0].description);
+      } else {
+        callback(`Breed ${breedName} not found.`, null);
+      }
+    }
+  });
+};
 
-fetchBreedDescription();
+// define the callback function
+const handleBreedDescription = (error, description) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log(description);
+  }
+};
+
+// call the fetchBreedDescription function with the callback function
+fetchBreedDescription('siamese', handleBreedDescription);
+
+
+// fetchBreedDescription();
 
 module.exports = fetchBreedDescription;
